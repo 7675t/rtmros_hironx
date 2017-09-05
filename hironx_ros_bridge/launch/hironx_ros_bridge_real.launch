@@ -1,5 +1,5 @@
 <launch>
-  <arg name="COLLADA_FILE" default="$(find hironx_ros_bridge)/models/kawada-hironx.dae" />
+  <arg name="COLLADA_FILE" default="$(find hironx_ros_bridge)/models/kawada-hironx_15dof.dae" />
   <arg name="CONF_FILE_COLLISIONDETECT" default="$(find hironx_ros_bridge)/conf/hironx_realrobot_fixedpath.conf" />
   <arg name="corbaport" default="15005" />
   <arg name="MODEL_FILE" default="/opt/jsk/etc/HIRONX/model/main.wrl" /> <!-- This shouldn't be changed unless you know what you're doing -->
@@ -8,6 +8,7 @@
   <arg name="USE_ROBOTHARDWARE" default="true" />
   <arg name="USE_SERVOCONTROLLER" default="true" />
   <arg name="USE_IMPEDANCECONTROLLER" default="false"/>
+  <arg name="USE_HAND_JOINT_STATE_PUBLISHER" default="true"/>
 
   <node name="hrpsys_py" pkg="hironx_ros_bridge" type="hironx.py" output="screen"
         args="--host $(arg nameserver) --port $(arg corbaport) --modelfile $(arg MODEL_FILE) --robot RobotHardware" />
@@ -22,4 +23,7 @@
     <arg name="USE_SERVOCONTROLLER" value="$(arg USE_SERVOCONTROLLER)" />
     <arg name="USE_IMPEDANCECONTROLLER" value="$(arg USE_IMPEDANCECONTROLLER)"/>
   </include>
+
+  <node if="$(arg USE_HAND_JOINT_STATE_PUBLISHER)"
+	name="hand_joint_state_publisher" type="hand_joint_state_publisher.py" pkg="hironx_ros_bridge"/>
 </launch>

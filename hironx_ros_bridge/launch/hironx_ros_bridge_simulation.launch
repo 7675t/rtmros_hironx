@@ -5,6 +5,7 @@
   <arg name="CONF_FILE" default="$(find hironx_ros_bridge)/conf/kawada-hironx.conf" />
   <arg name="CONF_FILE_COLLISIONDETECT" default="$(find hironx_ros_bridge)/conf/kawada-hironx.conf" />
   <arg name="DEBUG_HRPSYS" default="false" />
+  <arg name="USE_HAND_JOINT_STATE_PUBLISHER" default="true"/>
 
   <!-- Set model file to parameter server  -->
   <param name="hironx/collada_model_filepath" value="$(arg MODEL_FILE)" />
@@ -46,6 +47,10 @@
         args="$(arg openrtm_args)" ns="left" >
     <param name="frame_id" value="/CAMERA_HAND_L" />
   </node>
+
+  <node if="$(arg USE_HAND_JOINT_STATE_PUBLISHER)"
+	name="hand_joint_state_publisher" type="hand_joint_state_publisher.py" pkg="hironx_ros_bridge"/>
+  
   <rtconnect from="HiroNX(Robot)0.rtc:CAMERA_HEAD_R" to="ImageSensorROSBridge_HeadRight.rtc:timedImage" />
   <rtconnect from="HiroNX(Robot)0.rtc:CAMERA_HEAD_L" to="ImageSensorROSBridge_HeadLeft.rtc:timedImage" />
   <rtconnect from="HiroNX(Robot)0.rtc:CAMERA_HAND_R" to="ImageSensorROSBridge_HandRight.rtc:timedImage" />
